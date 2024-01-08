@@ -1,0 +1,7 @@
+{
+	"EndpointAddress": "0.0.0.0:8080",
+	"DNSBootstrapID": "<network>.voi.network",
+	"EnableCatchupFromArchiveServers": true,
+	"BaseLoggerDebugLevel": 4,
+	"FallbackDNSResolverAddress": "1.1.1.1"
+}
