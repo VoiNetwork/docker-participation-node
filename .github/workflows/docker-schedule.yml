@@ -19,6 +19,19 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v4
 
+      - name: Get Current Release
+        id: get_current_release
+        uses: joutvhu/get-release@v1
+        with:
+          latest: true
+          pattern: '^.*'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get debug
+        run:
+          echo "Current release is ${{ steps.get_current_release.outputs.tag_name }}"
+
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -26,27 +39,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check out the repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.get_current_release.outputs.tag_name }}
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: | 
+          images: |
             ghcr.io/${{ github.repository }}
           tags: |
-            type=semver,pattern={{version}}
-
-      - name: Check out the repo
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.meta.outputs.tags }}
+            type=raw,value=${{ steps.get_current_release.outputs.tag_name }}
+            type=raw,value=latest
 
       - name: Build and push Docker images
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:
           context: .
+          push: true
           build-args: |
-            BASE_ALGORAND_IMAGE=${{ steps.meta.outputs.tags }}
-          # Set push to false until ready to merge in
-          push: false
-          tags: ${{ steps.meta.outputs.tags }}, latest
+            BASE_ALGORAND_VERSION=${{ steps.get_current_release.outputs.tag_name }}
+          tags: latest
           labels: ${{ steps.meta.outputs.labels }}
