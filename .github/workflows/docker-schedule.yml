@@ -61,5 +61,5 @@ jobs:
           push: true
           build-args: |
             BASE_ALGORAND_VERSION=${{ steps.get_current_release.outputs.tag_name }}
-          tags: latest
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
