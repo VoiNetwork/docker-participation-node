@@ -11,7 +11,7 @@ ENV NETWORK=voitest \
 
 COPY ./config.json /etc/algorand/config.json
 COPY ./start.sh /node/run/start.sh
-COPY ./voi-startup.sh /node/run/voi-catchup.sh
+COPY ./voi-startup.sh /node/run/voi-startup.sh
 
 RUN apt-get update && apt-get dist-upgrade -y && apt install -y jq bc curl
 
