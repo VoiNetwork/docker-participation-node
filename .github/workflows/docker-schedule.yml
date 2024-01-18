@@ -47,7 +47,7 @@ jobs:
           images: |
             ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=${{ steps.get_current_release.outputs.tag_name }}
+            type=semver,pattern={{version}}
             type=raw,value=latest
 
       - name: Build and push Docker images
@@ -56,6 +56,6 @@ jobs:
           context: .
           push: true
           build-args: |
-            BASE_ALGORAND_VERSION=${{ steps.get_current_release.outputs.tag_name }}
+            BASE_ALGORAND_VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
