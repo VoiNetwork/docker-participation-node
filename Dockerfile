@@ -3,6 +3,9 @@ FROM algorand/algod:$BASE_ALGORAND_VERSION-stable
 LABEL "network.voi"="Voi Network"
 LABEL version=$BASE_ALGORAND_VERSION
 
+HEALTHCHECK --interval=30s --timeout=30s --start-period=20s \
+    CMD curl -f http://localhost:8080/health || exit 1
+
 ENV NETWORK=voitest \
     GENESIS_ADDRESS=https://testnet-api.voi.nodly.io \
     TELEMETRY_NAME="${HOSTNAME}" \
