@@ -61,8 +61,8 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: true
           build-args: |
             BASE_ALGORAND_VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
+          push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
