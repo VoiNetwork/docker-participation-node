@@ -67,7 +67,7 @@ jobs:
           tags: ghcr.io/voinetwork/docker-participation-node:latest
           labels: |
             ${{ steps.meta.outputs.labels }}
-            org.opencontainers.image.version: latest
+            org.opencontainers.image.version=latest
 
       - name: Build and push Docker images for current release
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
@@ -80,4 +80,4 @@ jobs:
           tags: ghcr.io/voinetwork/docker-participation-node:${{ env.VERSION }}
           labels: | 
             ${{ steps.meta.outputs.labels }}
-            org.opencontainers.image.version: ${{ env.VERSION }}
+            org.opencontainers.image.version=${{ env.VERSION }}
