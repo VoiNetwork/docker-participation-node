@@ -34,6 +34,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Filter version
+        id: filter_version
+        run: |
+          VERSION=$(echo "${{ steps.get_current_release.outputs.tag_name }}" | sed 's/^v//')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -48,16 +54,30 @@ jobs:
           images: |
             ghcr.io/${{ github.repository }}
           tags: |
-            type=semver,pattern={{version}}
-            type=raw,value=latest
+            type=edge,enable=true,priority=700,prefix=,suffix=,branch=$repo.default_branch
 
-      - name: Build and push Docker images
+      - name: Build and push Docker images latest
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           build-args: |
-            BASE_ALGORAND_VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
-          push: false
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+            BASE_ALGORAND_VERSION=latest
+          push: true
+          tags: ghcr.io/voinetwork/docker-participation-node:latest
+          labels: |
+            ${{ steps.meta.outputs.labels }}
+            org.opencontainers.image.version: latest
+
+      - name: Build and push Docker images for current release
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            BASE_ALGORAND_VERSION=${{ env.VERSION }}-stable
+          push: true
+          tags: ghcr.io/voinetwork/docker-participation-node:${{ env.VERSION }}
+          labels: | 
+            ${{ steps.meta.outputs.labels }}
+            org.opencontainers.image.version: ${{ env.VERSION }}
