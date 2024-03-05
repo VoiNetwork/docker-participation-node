@@ -3,5 +3,5 @@
 	"DNSBootstrapID": "<network>.voi.network",
 	"EnableCatchupFromArchiveServers": true,
 	"BaseLoggerDebugLevel": 4,
-	"FallbackDNSResolverAddress": "1.1.1.1"
+	"FallbackDNSResolverAddress": "1.1.1.1,8.8.8.8"
 }
