@@ -53,5 +53,5 @@ jobs:
           build-args: |
             BASE_ALGORAND_VERSION=${{ github.event.inputs.base-image }}
           push: true
-          tags: ${{ github.event.inputs.version }}
-          labels: ${{ github.event.inputs.version }}
+          tags: ghcr.io/voinetwork/docker-participation-node:${{ github.event.inputs.version }}
+          labels: ghcr.io/voinetwork/docker-participation-node:${{ github.event.inputs.version }}
