@@ -62,7 +62,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           build-args: |
-            BASE_ALGORAND_VERSION=latest
+            BASE_ALGORAND_VERSION=${{ env.VERSION }}-stable
           push: true
           tags: ghcr.io/voinetwork/docker-participation-node:latest
           labels: |
